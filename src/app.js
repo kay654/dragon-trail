@@ -1,7 +1,7 @@
 import { battleScreen, rewardScreen } from './play-screens.js';
 import { homeScreen, bookAreaScreen, historyScreen, settingsScreen, requirement } from './screens.js';
-import { validateQuestions } from '../shared/engine.js';
-import { sound } from '../shared/sound.js';
+import { validateQuestions } from './engine.js';
+import { sound } from './sound.js';
 import { AREAS, MONSTERS, monsterById, loadGame, saveGame, startBattle, strike, advanceBattle, claimReward, resetGame } from './game.js';
 import { icon, emblem, monster } from './art.js';
 
@@ -121,4 +121,11 @@ async function init() {
     document.querySelector('#retry-load').onclick = init;
   }
 }
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  const script = new URL('../sw.js', import.meta.url);
+  const scope = new URL('../', import.meta.url);
+  navigator.serviceWorker.register(script.href, { scope: scope.href }).catch(() => {});
+}
+registerServiceWorker();
 init();

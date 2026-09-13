@@ -1,4 +1,4 @@
-import { freshProfile, readProfile, createRound, nextQuestion, answerQuestion, finishRound, ROUND_SIZE } from '../shared/engine.js';
+import { freshProfile, readProfile, createRound, nextQuestion, answerQuestion, finishRound, ROUND_SIZE } from './engine.js';
 import { MONSTERS, PHANTOM_DRAGON, STAGES_PER_GRADE } from './dragons.js';
 export { MONSTERS, PHANTOM_DRAGON, STAGES_PER_GRADE } from './dragons.js';
 export const SAVE_KEY = 'kanji-dragon-trail:v1';

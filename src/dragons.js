@@ -1,4 +1,4 @@
-// The supplied artwork is shared by grades; collection and progress are separate.
+// The supplied artwork is reused by grades; collection and progress are separate.
 export const DRAGONS = [
   ['leaf', 'リーフドラゴン', '草', 1, '緑色の小さなドラゴン。葉っぱの翼で風にのり、新しい芽を見つける。'],
   ['flame', 'フレイムドラゴン', '炎', 1, '赤い体に、燃える角としっぽ。小さな炎で仲間をあたためる。'],

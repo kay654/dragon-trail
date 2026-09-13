@@ -1,5 +1,6 @@
 import { freshProfile, readProfile, createRound, nextQuestion, answerQuestion, finishRound, ROUND_SIZE } from './engine.js';
 import { MONSTERS, PHANTOM_DRAGON, STAGES_PER_GRADE } from './dragons.js';
+import { updatedChoice } from './question-choices.js';
 export { MONSTERS, PHANTOM_DRAGON, STAGES_PER_GRADE } from './dragons.js';
 export const SAVE_KEY = 'kanji-dragon-trail:v1';
 export const ATTACK_DAMAGE = 10;
@@ -119,7 +120,8 @@ export function resetGame(storage) {
 }
 function restoreBattle(raw,questions) {
   if(!raw) return null;
-  const r=raw.round, found=monsterById(raw.monsterId);
+  let r=raw.round;
+  const found=monsterById(raw.monsterId);
   const m=found?.key==='phantom' ? { ...found, grade:r?.grade, area:(r?.grade ?? 1)-1 } : found;
   if(!m||!r||r.grade!==m.grade) throw Error('battle');
   const round=createRound(questions,r.grade,r.mode==='practice'?'practice':'journey');
@@ -135,6 +137,10 @@ function restoreBattle(raw,questions) {
   for(const key of ['combo','best','correct','answers','startCombo']) if(!bounded(raw[key])) throw Error(key);
   if(raw.correct!==raw.solved.length || raw.correct>raw.answers || raw.combo>raw.best || raw.best>raw.correct+raw.startCombo) throw Error('counts');
   const current=round.pool.find(q=>q.id===r.current);
+  r={...r,
+    options:Array.isArray(r.options)?r.options.map(c=>updatedChoice(current,c)):r.options,
+    answers:Array.isArray(r.answers)?r.answers.map(a=>a&&({...a,choice:updatedChoice(round.pool.find(q=>q.id===a.id),a.choice)})):r.answers,
+  };
   if(!current || !raw.targets.includes(current.id) || !bounded(r.index,ROUND_SIZE) || typeof r.locked!=='boolean' || !Array.isArray(r.answers) || r.answers.length!==r.index || (r.index===ROUND_SIZE&&!r.locked)) throw Error('round');
   if(!Array.isArray(r.options)||r.options.length!==4||new Set(r.options).size!==4||r.options.some(c=>![current.answer,...current.distractors].includes(c))) throw Error('options');
   for(const a of r.answers) {

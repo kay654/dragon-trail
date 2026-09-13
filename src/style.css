@@ -86,7 +86,7 @@
 @keyframes dragon-defeat{0%{opacity:1;transform:none;filter:brightness(1)}15%{opacity:1;transform:translateX(16px) rotate(5deg);filter:brightness(1.8)}45%{opacity:1;transform:scale(.95);filter:brightness(2)}70%{opacity:1;transform:scale(1.04);filter:brightness(1.25)}100%{opacity:1;transform:none;filter:brightness(1)}}
 
 /* Phantom Dragon: a temporary review encounter, visually separate from collection battles. */
-.phantom .arena .landscape{filter:hue-rotate(55deg) saturate(1.5) brightness(.38)}.phantom .arena-vignette{background:radial-gradient(ellipse at 50% 53%,#9b3cff63,transparent 45%,#100a237f)}.phantom .arena-platform{border-color:#e977ff9e;box-shadow:0 0 36px #b238ff8c,inset 0 0 38px #f0a5ff42}.phantom .battle-monster{inset:78px 0 70px}.phantom .battle-monster .monster{max-height:420px;filter:drop-shadow(0 0 18px #b63cffaa) drop-shadow(0 16px 9px #060315a6)}.phantom .enemy-status{color:#ffe8ff}.phantom .rank{color:#ecb7ff}.phantom .hp{border-color:#4b1468;background:#230738}.phantom .hp i{background:linear-gradient(90deg,#a129dd,#ff93f5)}.phantom .battle-power{background:#160b2de8;color:#f0d8ff}.reward-shell.phantom .reward-art{background:radial-gradient(ellipse at 50% 55%,#ffd8ff,#9e68cb 62%,#281c4e)}.reward-shell.phantom .reward-art>.monster{width:100%;height:390px;filter:drop-shadow(0 0 22px #da56ff) drop-shadow(0 13px 10px #16051f)}.reward-shell.phantom .reward-ribbon{color:#fff0ff;text-shadow:0 2px 7px #35104f}
+.phantom .arena .landscape{filter:hue-rotate(55deg) saturate(1.5) brightness(.38)}.phantom .arena-vignette{background:radial-gradient(ellipse at 50% 53%,#9b3cff63,transparent 45%,#100a237f)}.phantom .arena-platform{border-color:#e977ff9e;box-shadow:0 0 36px #b238ff8c,inset 0 0 38px #f0a5ff42}.phantom .battle-monster .monster{filter:drop-shadow(0 0 18px #b63cffaa) drop-shadow(0 16px 9px #060315a6)}.phantom .enemy-status{color:#ffe8ff}.phantom .rank{color:#ecb7ff}.phantom .hp{border-color:#4b1468;background:#230738}.phantom .hp i{background:linear-gradient(90deg,#a129dd,#ff93f5)}.phantom .battle-power{background:#160b2de8;color:#f0d8ff}.reward-shell.phantom .reward-art{background:radial-gradient(ellipse at 50% 55%,#ffd8ff,#9e68cb 62%,#281c4e)}.reward-shell.phantom .reward-art>.monster{filter:drop-shadow(0 0 22px #da56ff) drop-shadow(0 13px 10px #16051f)}.reward-shell.phantom .reward-ribbon{color:#fff0ff;text-shadow:0 2px 7px #35104f}
 
 
 /* One responsive battle layout. Content can grow on short screens or with larger text. */
@@ -116,7 +116,7 @@
   :is(.boss,.final,.phantom) .hp-numbers{position:absolute;right:0;top:0;font-size:25px}
   :is(.boss,.final,.phantom) .enemy-status h2{font-size:clamp(17px,5.1vw,24px)}
   .hp{height:11px;border-width:1.5px}
-  .battle-monster,.boss .battle-monster,.final .battle-monster,.phantom .battle-monster{inset:70px 4% 31px}
+  .battle-monster,.boss .battle-monster,.final .battle-monster,.phantom .battle-monster{inset:82px 4% 31px}
   .boss .battle-monster,.final .battle-monster,.phantom .battle-monster{top:94px;left:1%;right:1%}
   .battle-monster .monster,.boss .battle-monster .monster,.final .battle-monster .monster,.phantom .battle-monster .monster{max-height:none}
   .arena-platform{bottom:9%;height:10%;left:19%;right:19%}
@@ -198,3 +198,13 @@
 
 /* Independent music/effect controls, comfortable on touch screens. */
 .setting.audio-volume{display:block;padding:12px 0}.audio-volume>span{display:flex;justify-content:space-between;align-items:center}.audio-volume output{font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted)}.setting.audio-volume input{display:block;width:100%;height:32px;margin:6px 0 0;accent-color:var(--green)}.audio-help{font-size:12px;line-height:1.8;color:var(--muted);margin:14px 0}
+
+/* Keep the app title on one line in the compact header. */
+.brand{white-space:nowrap}
+@media(max-width:700px){
+  .header{gap:8px}
+  .brand{font-size:clamp(13px,4.1vw,16px);gap:clamp(4px,1.6vw,6px)}
+  .brand>.brand-emblem{width:clamp(30px,8.7vw,34px);height:clamp(30px,8.7vw,34px)}
+  .header nav{gap:clamp(3px,1.6vw,6px)}
+  .header nav button{min-width:clamp(34px,10.7vw,40px)}
+}

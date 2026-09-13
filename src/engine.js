@@ -1,3 +1,4 @@
+import { questionChoices } from './question-choices.js';
 export const ROUND_SIZE = 10;
 export const STORAGE_KEY = "kotoba-islands:v1";
 export const ISLANDS = [
@@ -111,6 +112,7 @@ export function validateQuestions(data) {
     )
       throw new Error(`問題データを確認してください: ${q?.id}`);
     ids.add(q.id);
+    questionChoices(q);
   }
   return data;
 }
@@ -171,7 +173,7 @@ export function nextQuestion(round, profile, random = Math.random) {
     }
   }
   round.current = pick;
-  round.options = shuffle([pick.answer, ...pick.distractors], random);
+  round.options = shuffle(questionChoices(pick), random);
   round.locked = false;
   return pick;
 }

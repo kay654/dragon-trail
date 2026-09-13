@@ -18,7 +18,8 @@ export function icon(name) {
   return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.spark}</svg>`;
 }
 export function emblem() {
-  return '<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="m24 2 19 10v24L24 46 5 36V12Z" fill="#e9b95b"/><path d="m12 31 7-17 5 8 10-9-2 13 6 6-14 6Z" fill="#173f43"/><path d="m23 29 8-3-4 7" stroke="#fff1bf" stroke-width="2"/><circle cx="27" cy="23" r="1.6" fill="#fff1bf"/></svg>';
+  const source = new URL('../assets/emblem.svg', import.meta.url).href;
+  return `<img class="brand-emblem" src="${source}" width="40" height="40" alt="" aria-hidden="true" draggable="false">`;
 }
 export function monster(m, { silhouette = false, compact = false } = {}) {
   if (m.key === 'phantom') {

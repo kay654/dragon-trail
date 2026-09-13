@@ -13,6 +13,9 @@ export function freshProfile() {
     version: 1,
     grade: 1,
     sound: false,
+    music: false,
+    soundVolume: .7,
+    musicVolume: .45,
     auto: true,
     totalCorrect: 0,
     totalAnswers: 0,
@@ -32,6 +35,10 @@ export function readProfile(storage) {
     if (!p || p.version !== 1) return { profile: base, recovered: !!p };
     base.grade = [1, 2, 3, 4, 5, 6].includes(p.grade) ? p.grade : 1;
     base.sound = p.sound === true;
+    base.music = p.music === true;
+    for (const key of ['soundVolume', 'musicVolume']) {
+      if (Number.isFinite(p[key])) base[key] = Math.max(0, Math.min(1, p[key]));
+    }
     base.auto = p.auto !== false;
     for (const k of [
       "totalCorrect",

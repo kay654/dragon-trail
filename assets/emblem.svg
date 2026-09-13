@@ -1,1 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="m24 2 19 10v24L24 46 5 36V12Z" fill="#e9b95b"/><path d="m12 31 7-17 5 8 10-9-2 13 6 6-14 6Z" fill="#173f43"/><path d="m23 29 8-3-4 7" fill="none" stroke="#fff1bf" stroke-width="2"/><circle cx="27" cy="23" r="1.6" fill="#fff1bf"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <title>漢字竜の探検隊</title>
+  <defs>
+    <linearGradient id="forest" x1="20" y1="10" x2="228" y2="254" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14696b"/><stop offset=".48" stop-color="#0b4147"/><stop offset="1" stop-color="#062a35"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="20" y1="8" x2="218" y2="248" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#27a4a0"/><stop offset=".5" stop-color="#13626b"/><stop offset="1" stop-color="#164351"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="59" y1="43" x2="205" y2="212" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff18a"/><stop offset=".36" stop-color="#ffdc63"/><stop offset="1" stop-color="#e9a333"/>
+    </linearGradient>
+    <linearGradient id="bevel" x1="52" y1="52" x2="202" y2="216" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffbe"/><stop offset=".42" stop-color="#ffe873"/><stop offset=".75" stop-color="#ffc64b"/><stop offset="1" stop-color="#ca8425"/>
+    </linearGradient>
+    <linearGradient id="dragon" x1="105" y1="65" x2="165" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#103f42"/><stop offset="1" stop-color="#062d35"/>
+    </linearGradient>
+    <clipPath id="tile"><rect x="3" y="3" width="250" height="250" rx="59"/></clipPath>
+    <filter id="shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#001b23" flood-opacity=".48"/>
+    </filter>
+  </defs>
+  <rect x="3" y="3" width="250" height="250" rx="59" fill="url(#forest)"/>
+  <g clip-path="url(#tile)">
+    <path d="M40 74 3 121v132h250V122l-37-48-87 153Z" fill="#002630" opacity=".25"/>
+    <path d="M16 40C33 12 60 6 100 6h77C86 16 39 45 6 98V66Z" fill="#2a9691" opacity=".09"/>
+  </g>
+  <rect x="3" y="3" width="250" height="250" rx="59" stroke="url(#rim)" stroke-width="2"/>
+  <g filter="url(#shadow)">
+    <path d="M132 24 216 72q4 2 4 7v96q0 5-4 7l-84 48q-4 2-8 0l-84-48q-4-2-4-7V79q0-5 4-7l84-48q4-2 8 0Z" fill="url(#bevel)"/>
+    <path d="m128 29 87 50v97l-87 50-87-50V79Z" fill="url(#gold)"/>
+    <path d="m128 29 87 50-87 72Z" fill="#f6bd43" opacity=".2"/>
+    <path d="m41 176 87-86v136Z" fill="#fff498" opacity=".13"/>
+    <path d="m128 29 87 50 4-4-87-51q-4-2-8 0l-84 48-3 5 4 2Z" fill="#fffbc0" opacity=".3"/>
+    <path d="m128 226 87-50 4 3-87 51q-2 1-4 1Z" fill="#b87423" opacity=".26"/>
+    <!-- The eye and three-toed paw are cut out of the dragon silhouette. -->
+    <path fill="url(#dragon)" fill-rule="evenodd" d="
+      M108 61 168 95 168 87 181 115 192 122 192 145 166 134 185 169 124 204 62 152 99 84 116 90Z
+      M145 96 162 106 169 117 152 111Z
+      M130 106Q120 115 113 130L119 146Q120 148 123 148H129Q132 148 133 145L138 131Q130 118 130 106Z
+      M96 129Q104 140 110 145L112 153 105 162 96 156Q91 144 96 129Z
+      M156 129Q150 140 141 146L139 154 146 163 156 156Q161 143 156 129Z
+      M125 152Q115 152 110 163Q108 168 114 175L126 190 140 170Q143 166 139 161Q134 152 125 152Z
+      M146 169 157 162Q155 169 151 174L141 180Z"/>
+  </g>
+</svg>

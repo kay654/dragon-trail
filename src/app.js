@@ -4,6 +4,7 @@ import { loadQuestions } from './startup.js';
 import { audio } from './sound.js';
 import { AREAS, MONSTERS, monsterById, loadGame, saveGame, startBattle, strike, advanceBattle, claimReward, resetGame } from './game.js';
 import { icon, emblem, monster } from './art.js';
+import { track } from './analytics.js';
 
 const app = document.querySelector('#app');
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -59,10 +60,18 @@ function showDialog(content) {
 const closeButton = '<button class="primary wide" data-action="close-dialog">とじる</button>';
 function go(target, animate = true) { clearTimeout(timer); view = target; render(true, animate); window.scrollTo({ top: 0, behavior: 'instant' }); }
 function rewardSound() { audio.sound(game.active.unlocked.length ? 'legend' : game.active.round.mode === 'practice' ? 'practice-clear' : 'clear'); }
+function battleParameters(active) {
+  return {
+    level_name: active.round.mode === 'practice' ? 'practice' : monsterById(active.monsterId).kind,
+    content_grade: active.round.grade,
+  };
+}
 function begin(practice = false) {
+  const startingNewBattle = !game.active;
   const active = startBattle(game, questions, practice);
   if (!active) { notice = '復習する問題はクリア済みです。'; go('home'); return; }
   persist();
+  if (startingNewBattle) track('level_start', battleParameters(active));
   go(active.won ? 'reward' : 'battle', active.won || !active.answers);
   if (active.won) rewardSound();
   else if (!active.answers) audio.sound(active.round.mode === 'practice' || currentMonster().kind === 'normal' ? 'start' : currentMonster().kind);
@@ -78,6 +87,12 @@ function answer(choice) {
   const feedback = strike(game, choice);
   if (!feedback) return;
   persist();
+  if (feedback.finisher) {
+    const parameters = battleParameters(game.active);
+    track('level_end', { ...parameters, success: true });
+    if (game.active.newCatch) track('unlock_achievement', { achievement_id: 'dragon_collection', content_grade: parameters.content_grade });
+    if (game.active.unlocked.length) track('unlock_achievement', { achievement_id: 'grade_completion', content_grade: parameters.content_grade });
+  }
   render(false, true);
   audio.sound(feedback.correct ? game.active.won ? 'finish' : feedback.special ? 'special' : feedback.retry ? 'retry' : game.active.combo >= 2 ? 'combo' : 'correct' : 'wrong', { combo: game.active.combo });
   announce(feedback.correct ? `${feedback.damage}ダメージ。${game.active.won ? '討伐成功！' : `残りHP ${game.active.hp}`}` : `答えは${game.active.round.current.word}。${game.active.round.current.reading}`);

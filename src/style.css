@@ -212,7 +212,7 @@
 /* On phones, give the opponent the scene and keep the answer controls compact. */
 @media(max-width:760px){
   #app[data-view=battle] .header{min-height:54px;padding-top:4px;padding-bottom:4px}
-  #app[data-view=battle] .header nav button{min-width:42px;min-height:44px}
+  #app[data-view=battle] .header nav button{min-width:42px;min-height:44px;align-items:center;justify-content:center}
   #app[data-view=battle] .header nav button span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   .battle-top{min-height:36px;margin-bottom:7px}
   .battle-top>span:not(.remaining-count){display:none}

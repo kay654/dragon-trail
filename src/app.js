@@ -2,6 +2,7 @@ import { battleScreen, rewardScreen } from './play-screens.js';
 import { homeScreen, bookAreaScreen, historyScreen, settingsScreen, requirement } from './screens.js';
 import { loadQuestions } from './startup.js';
 import { audio } from './sound.js';
+import { battleFeedback } from './battle-feedback.js';
 import { AREAS, MONSTERS, monsterById, loadGame, saveGame, startBattle, strike, advanceBattle, claimReward, resetGame } from './game.js';
 import { icon, emblem, monster } from './art.js';
 import { track } from './analytics.js';
@@ -36,11 +37,16 @@ function header() {
  return '<header class="header"><button class="brand" data-action="home" aria-label="ホーム">'+emblem()+'<span>漢字竜の探検隊</span></button><nav aria-label="メニュー"><button data-action="sound" aria-label="音を'+(game.profile.sound || game.profile.music ? 'オフ' : 'オン')+'にする" aria-pressed="'+!!(game.profile.sound || game.profile.music)+'">'+icon(game.profile.sound || game.profile.music ? 'sound' : 'mute')+'<span>音</span></button><button data-action="book">'+icon('book')+'<span>図鑑</span></button><button data-action="history">'+icon('flag')+'<span>ノート</span></button><button data-action="help">'+icon('settings')+'<span>設定</span></button></nav></header>';
 }
 function render(focus = false, animate = false) {
+  if (app.dataset.view === 'battle' && document.activeElement?.matches('.answer, .next-answer')) document.activeElement.blur();
   app.dataset.view = view;
   app.innerHTML = `${header()}<main id="main">${view === 'home' ? home() : view === 'battle' ? battleScreen(game, questions, animate) : view === 'reward' ? rewardScreen(game, questions, animate) : view === 'history' ? historyScreen(game, questions, historyGrade, historyFilter) : book()}</main><footer><span>漢字竜の探検隊</span><span>記録は自動保存</span></footer><p class="notice" role="status">${saveFailed ? 'この端末に保存できません。今は遊べますが、閉じると記録が消えます。' : esc(notice)}</p><div class="sr-only" id="live" role="status" aria-live="polite"></div><dialog id="dialog" aria-labelledby="dialog-title"></dialog>`;
   if (focus) document.querySelector('[data-focus]')?.focus({ preventScroll: true });
   syncAudio();
 }
+app.addEventListener('pointerdown', event => {
+  if (event.pointerType === 'touch') app.dataset.touchInput = '';
+  else if (event.pointerType === 'mouse') delete app.dataset.touchInput;
+});
 function grades() {
   return `<div class="grades" role="group" aria-label="問題の学年">${AREAS.map((a, i) => `<button data-grade="${i + 1}" class="${game.profile.grade === i + 1 ? 'selected' : ''}" aria-pressed="${game.profile.grade === i + 1}" ${game.active ? 'disabled' : ''}><b>${i + 1}<small>年</small></b><span>${a.short}</span></button>`).join('')}</div>`;
 }
@@ -58,7 +64,7 @@ function showDialog(content) {
   dialog.querySelector('button, input')?.focus();
 }
 const closeButton = '<button class="primary wide" data-action="close-dialog">とじる</button>';
-function go(target, animate = true) { clearTimeout(timer); view = target; render(true, animate); window.scrollTo({ top: 0, behavior: 'instant' }); }
+function go(target, animate = true) { clearTimeout(timer); audio.cancelCue(); view = target; render(true, animate); window.scrollTo({ top: 0, behavior: 'instant' }); }
 function rewardSound() { audio.sound(game.active.unlocked.length ? 'legend' : game.active.round.mode === 'practice' ? 'practice-clear' : 'clear'); }
 function battleParameters(active) {
   return {
@@ -75,12 +81,20 @@ function begin(practice = false) {
   go(active.won ? 'reward' : 'battle', active.won || !active.answers);
   if (active.won) rewardSound();
   else if (!active.answers) audio.sound(active.round.mode === 'practice' || currentMonster().kind === 'normal' ? 'start' : currentMonster().kind);
+  scheduleNext();
+}
+function scheduleNext() {
+  clearTimeout(timer);
+  const b = game?.active;
+  if (view !== 'battle' || !b?.feedback?.correct || !game.profile.auto || document.hidden || document.querySelector('dialog[open]')) return;
+  timer = setTimeout(() => { if (game.active === b) next(); }, battleFeedback(b).duration);
 }
 function next() {
   clearTimeout(timer);
-  if (view !== 'battle' || !game.active?.feedback) return;
+  if (view !== 'battle' || !game.active?.feedback || document.hidden || document.querySelector('dialog[open]')) return;
+  audio.cancelCue();
   if (game.active.won) { go('reward'); rewardSound(); }
-  else { advanceBattle(game); persist(); render(true); }
+  else { advanceBattle(game); persist(); render(true, true); }
 }
 function answer(choice) {
   if (view !== 'battle' || document.querySelector('dialog[open]')) return;
@@ -94,9 +108,9 @@ function answer(choice) {
     if (game.active.unlocked.length) track('unlock_achievement', { achievement_id: 'grade_completion', content_grade: parameters.content_grade });
   }
   render(false, true);
-  audio.sound(feedback.correct ? game.active.won ? 'finish' : feedback.special ? 'special' : feedback.retry ? 'retry' : game.active.combo >= 2 ? 'combo' : 'correct' : 'wrong', { combo: game.active.combo });
+  audio.sound(feedback.correct ? game.active.won ? 'finish' : feedback.special ? 'special' : feedback.retry ? 'retry' : game.active.combo >= 2 ? 'combo' : 'correct' : 'wrong', { combo: game.active.combo, impactAt: battleFeedback(game.active).impact / 1000 });
   announce(feedback.correct ? `${feedback.damage}ダメージ。${game.active.won ? '討伐成功！' : `残りHP ${game.active.hp}`}` : `答えは${game.active.round.current.word}。${game.active.round.current.reading}`);
-  if (feedback.correct && game.profile.auto) timer = setTimeout(next, game.active.won ? 2200 : feedback.special ? 1300 : 1100);
+  if (feedback.correct && game.profile.auto) scheduleNext();
   else document.querySelector('.next-answer')?.focus({ preventScroll: true });
 }
 app.addEventListener('click', event => {
@@ -126,7 +140,7 @@ app.addEventListener('click', event => {
     case 'sound': {
       const enabled = !(game.profile.sound || game.profile.music);
       game.profile.sound = enabled; game.profile.music = enabled;
-      persist(); render(); audio.unlock(); audio.sound('tap'); break;
+      persist(); syncAudio(); audio.unlock(); audio.sound('tap'); break;
     }
     case 'pause': showDialog(`<h2 id="dialog-title">ひとやすみ</h2><p>バトルはここで待っているよ。<br>途中の問題から再開できるよ。</p><button class="primary wide" data-action="close-dialog">バトルにもどる ${icon('arrow')}</button><button class="quiet wide" data-action="home">保存して拠点へ</button>`); break;
     case 'stow':
@@ -145,7 +159,7 @@ app.addEventListener('click', event => {
     }
   }
 });
-app.addEventListener('close', () => syncAudio(), true);
+app.addEventListener('close', () => { syncAudio(); scheduleNext(); }, true);
 app.addEventListener('change', event => {
   const key = { 'auto-setting': 'auto', 'sound-setting': 'sound', 'music-setting': 'music' }[event.target.id];
   if (key) {

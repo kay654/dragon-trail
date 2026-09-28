@@ -1,0 +1,195 @@
+/* All motion is finite and confined to the arena. The question stays still. */
+.arena{contain:layout paint}
+.hp-value{position:relative;display:inline-grid}
+.hp-before,.hp-current{grid-area:1/1}
+.hit-motion .hp-before{animation:hp-old-number var(--impact) step-end both}
+.hit-motion .hp-current{animation:hp-new-number var(--impact) step-end both}
+.attack-fx{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+.dragon-aura{position:absolute;inset:23% 7% 4%;background:radial-gradient(ellipse,#fff1ac55,transparent 65%);opacity:0;pointer-events:none}
+.pressure-low .dragon-aura{opacity:.65}
+.pressure-last .dragon-aura{opacity:1;background:radial-gradient(ellipse,#ffd46d88,transparent 68%)}
+.pressure-low .hp i:not(.hp-ghost){background:linear-gradient(90deg,#ffb951,#ffe6a0)}
+.pressure-last .hp i:not(.hp-ghost){background:linear-gradient(90deg,#ff865b,#ffd25f)}
+.pressure-last .arena{box-shadow:0 0 0 2px #d5a442,0 8px 25px #b9873126}
+.pressure-last .remaining-count{color:#89561a}
+.pressure-last .arena-vignette{background:linear-gradient(180deg,#122c47b3,transparent 42%,transparent 70%,#d1803b4d)}
+.encounter-boss .battle-top,.encounter-final .battle-top{background:#eee6d7;border-color:#d9c4a4}
+.power-charge{display:flex;align-items:center;gap:7px;font-size:11px;white-space:nowrap}
+.charge-gems{display:flex;gap:4px}
+.charge-gems i{display:block;width:7px;height:10px;border:1px solid #c9e7cc99;transform:skew(-14deg);border-radius:2px}
+.charge-gems .charged{background:#ffe096;border-color:#ffe096;box-shadow:0 0 6px #ffe09666}
+.power-charge.ready{color:#ffe096}
+.answer-celebrate .answer.correct{animation:answer-confirm .28s ease-out both}
+.answer-celebrate .blank.solved{animation:word-confirm .36s ease-out both}
+.answer-celebrate .feedback.good>div{animation:feedback-pop .22s ease-out both}
+.answer-celebrate .progress-dot.is-complete:not(:has(+.is-complete)){animation:feedback-pop .3s ease-out both}
+.question-enter .quiz{animation:question-arrive .18s ease-out both}
+.next-answer{position:relative;overflow:hidden}
+.auto-next:after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:#ffe096;transform-origin:left;animation:next-countdown var(--beat) linear both}
+.power-gather{position:absolute;left:50%;top:54%;width:110px;height:110px;margin:-55px;border:2px solid #fff5c1;border-radius:50%;background:radial-gradient(circle,#fffdeb99,transparent 65%);animation:power-gather var(--impact) ease-in both}
+.hit-motion .attack-slash{top:54%;height:10px;width:84%;left:8%;transform:rotate(var(--slash-angle));animation:power-slash .32s var(--impact) cubic-bezier(.12,.8,.3,1) both}
+.hit-motion .attack-slash:after{display:none}
+.attack-echo{position:absolute;top:54%;left:6%;width:88%;height:13px;border-radius:50%;background:#fff7d0;box-shadow:0 0 14px #ffd16a;transform:rotate(calc(var(--slash-angle) * -1));animation:power-slash .36s calc(var(--impact) + 65ms) ease-out both}
+.hit-motion .hit-ring{top:54%;width:80px;height:80px;left:calc(50% - 40px);margin-top:-40px;border-width:3px;animation:impact-ring .52s var(--impact) ease-out both}
+.impact-flash{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 54%,#fffbece6,transparent 73%);animation:impact-flash .22s var(--impact) ease-out both}
+.hit-motion .hit-sparks i{top:54%;width:var(--size);height:calc(var(--size) * 3);border-radius:2px;background:#fff0b7;box-shadow:0 0 5px #ffb84f;animation:impact-spark .5s var(--impact) ease-out both}
+.attack-title{position:absolute;left:4%;right:4%;top:30%;text-align:center;font-size:clamp(14px,2vw,21px);font-weight:900;color:#fff6cf;letter-spacing:.08em;text-shadow:0 2px 3px #102b42,0 0 12px #102b42;animation:attack-title .66s var(--impact) both}
+.hit-motion .damage{top:49%;font-family:Impact,'Arial Black',sans-serif;font-style:italic;font-size:104px;line-height:.95;color:#fff7dc;white-space:nowrap;animation:impact-number .72s var(--impact) both;-webkit-text-stroke:1.5px #243649;paint-order:stroke fill;text-shadow:0 5px 0 #213849,0 9px 16px #14253899}
+.hit-motion .damage small{font:800 12px/1.6 sans-serif;letter-spacing:.16em;color:#ffe095;margin-bottom:4px}
+.hit-motion .battle-monster{animation:impact-recoil .48s var(--impact) both}
+.hit-motion .hp i:not(.hp-ghost){animation:hp-drain .25s var(--impact) ease-out both}
+.hit-motion .hp i.hp-ghost{animation:hp-drain .4s calc(var(--impact) + 170ms) ease-out both}
+.hit-motion.arena{animation:arena-impact .28s var(--impact) both}
+.answer-celebrate .combo{animation:combo-confirm .36s var(--impact) both}
+[data-tier=combo] .attack-slash{box-shadow:0 0 15px 7px #bffff299;background:#edfff5}
+[data-tier=combo] .hit-ring{border-color:#b8fff2}
+[data-tier=special] .attack-title,[data-tier=finish] .attack-title{font-size:clamp(20px,3vw,30px);color:#ffe29c;font-style:italic}
+[data-tier=special] .damage,[data-tier=finish] .damage{font-size:136px;color:#ffe29c}
+[data-tier=special] .power-gather,[data-tier=finish] .power-gather{width:190px;height:190px;margin:-95px;border-width:3px;box-shadow:0 0 28px #ffd27777,inset 0 0 25px #ffd27777}
+[data-tier=special] .hit-ring,[data-tier=finish] .hit-ring{border-width:5px;animation-duration:.66s}
+[data-tier=special] .hit-motion,[data-tier=finish] .hit-motion{animation-name:arena-heavy-impact}
+[data-tier=special] .impact-flash,[data-tier=finish] .impact-flash{background:radial-gradient(ellipse at 50% 54%,#fff6d8,transparent 85%)}
+.defeat-motion .battle-monster{animation:dragon-finish 1.32s var(--impact) both}
+.defeat-motion .damage{animation-duration:.76s}
+.defeat-motion .victory-seal{top:40%;z-index:8;padding:10px 0;transform:rotate(-5deg);animation:victory-arrive .5s .98s both}
+.defeat-motion .victory-seal:before{content:"";position:absolute;inset:-10px -20%;z-index:-1;background:linear-gradient(90deg,transparent,#173a49e8 20%,#173a49e8 80%,transparent);border-block:1px solid #ffe09699}
+.defeat-motion .victory-seal b{font-size:clamp(34px,5vw,52px)}
+.boss-intro{animation-duration:1.35s;background:linear-gradient(120deg,#111b30eb,#3c253ad9)}
+.boss-intro span{font-style:italic}
+.collection-stamp{display:flex;align-items:center;gap:12px;border:1px solid #cfdbc5;background:#eff3e8;border-radius:12px;padding:13px 15px;margin:18px 0 12px}
+.collection-stamp>span{font:800 11px sans-serif;letter-spacing:.08em;background:#426854;color:white;padding:7px;border-radius:6px}
+.collection-stamp b{font-size:15px;display:block}
+.collection-stamp small{font-size:11px;display:block;margin-top:6px;color:#637363}
+.collection-stamp>.icon{margin-left:auto;color:#8c6a29}
+.collection-stamp.new-catch{border-color:#d4b866;background:linear-gradient(110deg,#fff0bb,#fffbed)}
+.new-catch>span{background:#835f22;color:#fff9dc;transform:rotate(-7deg)}
+.reveal-motion .new-catch{animation:collection-register .48s .32s both}
+.reveal-motion .reward-copy h1{animation:feedback-pop .32s .15s both}
+.battle-record{display:flex;gap:18px;font-size:12px;flex-wrap:wrap;margin:12px 0;color:#536958}
+.battle-record>span{display:flex;align-items:center;gap:5px}
+.battle-record .icon{width:17px;height:17px;color:#947433}
+.battle-record b{font-size:19px;color:#234d42}
+.reveal-motion .capture-rays{animation:rays-turn 8s ease-out both}
+.reveal-motion .capture-stars i{animation-duration:1.2s}
+.reveal-motion .next-discovery{animation:question-arrive .3s .55s both}
+.next-discovery:has(+.primary){border-color:#c8d9b9}
+@keyframes answer-confirm{0%{transform:scale(.94)}55%{transform:scale(1.055)}100%{transform:none}}
+@keyframes word-confirm{0%{box-shadow:0 0 0 0 #6bb67780}100%{box-shadow:0 0 0 12px #6bb67700}}
+@keyframes feedback-pop{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes question-arrive{from{opacity:.55;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes next-countdown{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes hp-old-number{from{visibility:visible}to{visibility:hidden}}
+@keyframes hp-new-number{from{visibility:hidden}to{visibility:visible}}
+@keyframes power-gather{0%{opacity:0;transform:scale(1.7)}35%{opacity:.8}100%{opacity:0;transform:scale(.12)}}
+@keyframes power-slash{0%{opacity:0;scale:.08 1}16%,38%{opacity:1;scale:1 1}100%{opacity:0;scale:1.18 .25}}
+@keyframes impact-ring{0%{opacity:0;transform:scale(.2)}12%{opacity:.9}100%{opacity:0;transform:scale(3.5)}}
+@keyframes impact-flash{0%{opacity:0}16%{opacity:.75}100%{opacity:0}}
+@keyframes impact-spark{0%{opacity:0;transform:rotate(var(--angle)) translateY(8px)}12%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(var(--distance)) scale(.2)}}
+@keyframes attack-title{0%{opacity:0;transform:translateX(-18px) rotate(-4deg)}18%,70%{opacity:1;transform:translateX(0) rotate(-4deg)}100%{opacity:0;transform:translateX(12px) rotate(-4deg)}}
+@keyframes impact-number{0%{opacity:0;translate:0 14px;scale:.4}14%,24%{opacity:1;translate:0 -4px;scale:1.18}40%,72%{opacity:1;translate:0 -8px;scale:1}100%{opacity:0;translate:0 -32px;scale:.95}}
+/* The repeated recoil pose is a 70 ms hit stop without blocking the event loop. */
+@keyframes impact-recoil{0%{transform:none}12%,27%{transform:translate(10px,-2px) rotate(4deg);filter:brightness(1.65)}55%{transform:translate(-4px,0) rotate(-1deg);filter:brightness(1.1)}100%{transform:none;filter:brightness(1)}}
+@keyframes arena-impact{0%,100%{transform:none}15%{transform:translate(-3px,1px)}35%{transform:translate(3px,-1px)}60%{transform:translate(-1px,0)}}
+@keyframes arena-heavy-impact{0%,100%{transform:none}12%{transform:translate(-8px,3px) rotate(-.5deg)}30%{transform:translate(7px,-3px) rotate(.4deg)}52%{transform:translate(-4px,2px)}75%{transform:translate(2px,-1px)}}
+@keyframes combo-confirm{0%,100%{transform:none}35%{transform:scale(1.1);color:#ffe096}}
+@keyframes dragon-finish{0%{transform:none;filter:brightness(1)}8%,14%{transform:translate(13px,-3px) rotate(5deg);filter:brightness(2)}42%{transform:scale(.92);filter:brightness(1.5)}70%,100%{transform:translateY(5px) scale(.92);opacity:.3;filter:brightness(1)}}
+@keyframes victory-arrive{0%{opacity:0;scale:1.6}60%{opacity:1;scale:.95}100%{opacity:1;scale:1}}
+@keyframes collection-register{0%{opacity:0;transform:scale(1.1) rotate(-2deg)}70%{opacity:1;transform:scale(.98)}100%{opacity:1;transform:none}}
+@media(max-width:760px){
+  .power-charge{font-size:9px;gap:5px}.charge-gems{gap:3px}.charge-gems i{width:5px;height:8px}
+  .hit-motion .damage{font-size:80px;top:51%}.hit-motion .damage small{font-size:12px}
+  [data-tier=special] .damage,[data-tier=finish] .damage{font-size:100px}
+  .attack-title{top:36%;font-size:14px}[data-tier=special] .attack-title,[data-tier=finish] .attack-title{font-size:20px}
+  .defeat-motion .victory-seal{top:44%}.victory-seal span{font-size:12px}
+  .collection-stamp{margin:13px 0 10px;padding:11px 12px;gap:10px}.collection-stamp b{font-size:13px}
+  .battle-record{margin:10px 0;font-size:11px;gap:14px}.battle-record b{font-size:17px}
+}
+@media(max-width:760px) and (max-height:660px){
+  .battle-grid{grid-template-rows:minmax(170px,1fr) auto;gap:8px}.arena{min-height:170px}
+  #app[data-view=battle] .header{min-height:54px}
+  .battle-top{margin-bottom:6px;min-height:32px}
+  .battle-monster{top:78px;bottom:27px}.boss .battle-monster,.final .battle-monster,.phantom .battle-monster{top:87px;bottom:27px}
+  .quiz{padding-top:6px;padding-bottom:8px}.quiz-label{min-height:23px}
+  .feedback{margin-top:9px}.hint{margin-bottom:7px}
+  .attack-title{top:45%;font-size:12px}[data-tier=special] .attack-title,[data-tier=finish] .attack-title{font-size:16px}
+  .hit-motion .damage{top:55%;font-size:58px}[data-tier=special] .damage,[data-tier=finish] .damage{font-size:70px}
+  .hit-motion .damage small{font-size:8px;line-height:1}
+}
+
+/* A brief cinematic burst, then complete stillness before the next question. */
+.attack-fx{--blast:#ffe580;--blast-edge:#ff9c37}
+[data-tier=combo] .attack-fx{--blast:#b6ffef;--blast-edge:#35d9ef}
+[data-technique=nova] .attack-fx{--blast:#e4d2ff;--blast-edge:#a076ff}
+[data-technique=meteor] .attack-fx{--blast:#ffd49f;--blast-edge:#ff793d}
+.impact-backdrop{position:absolute;inset:20% 0 29px;background:radial-gradient(ellipse at 50% 60%,#10233844,#091429dc);animation:battle-darken .75s both}
+[data-tier=normal] .impact-backdrop{opacity:.45;animation-name:battle-darken-soft}
+.answer-callout{position:absolute;top:39%;left:8%;right:8%;z-index:11;text-align:center;font-size:clamp(26px,4vw,40px);font-weight:900;font-style:italic;letter-spacing:.12em;color:#fff8ce;text-shadow:0 3px 0 #234340,0 0 18px #172b46;animation:answer-shout var(--impact) both}
+.speed-tunnel{position:absolute;inset:0;z-index:1;background:repeating-conic-gradient(from 15deg at 50% 56%,transparent 0deg 13deg,var(--blast) 14deg 15deg,transparent 16deg 30deg);mask-image:radial-gradient(ellipse at 50% 56%,transparent 22%,#000 65%);animation:speed-burst .55s var(--impact) both}
+.impact-star{position:absolute;z-index:2;width:60%;aspect-ratio:1;left:20%;top:56%;background:#fffce8;clip-path:polygon(50% 0,57% 34%,82% 11%,67% 41%,100% 50%,66% 59%,87% 88%,58% 67%,50% 100%,41% 66%,12% 89%,33% 59%,0 50%,33% 41%,12% 12%,42% 34%);animation:star-impact .42s var(--impact) both}
+.blast-wave{position:absolute;z-index:2;left:50%;top:56%;width:130px;height:130px;margin:-65px;border:9px solid var(--blast);border-radius:50%;box-shadow:0 0 0 12px #fff7d327,0 0 28px var(--blast-edge),inset 0 0 25px var(--blast-edge);animation:blast-expand .58s calc(var(--impact) + 40ms) both}
+.attack-title{z-index:10;left:7%;right:7%;top:31%;padding:5px 8px;background:linear-gradient(90deg,transparent,#122a40ed 15%,#122a40ed 85%,transparent);border-block:1px solid #ffe6a870;letter-spacing:.03em}
+.hit-motion .attack-slash{height:17px;background:linear-gradient(0deg,var(--blast-edge),#fff 48%,var(--blast));box-shadow:0 0 12px 5px var(--blast-edge)}
+.hit-motion .hit-sparks i{background:var(--blast);box-shadow:0 0 8px var(--blast-edge)}
+.hit-motion .battle-monster{animation-name:power-recoil}
+.hit-motion .enemy-status{z-index:12;text-shadow:0 2px 3px #10283d}
+.hit-motion .enemy-status:before{content:"";position:absolute;inset:-12px -24px -6px;z-index:-1;background:linear-gradient(#102c42ed,#102c4299);animation:battle-darken .75s both;pointer-events:none}
+.hit-motion .landscape{animation:battle-zoom .65s var(--impact) both;transform-origin:50% 56%}
+.answer-celebrate .answer.correct{animation:answer-power .38s both}
+.answer-celebrate .answer.correct:before{content:"";position:absolute;inset:-4px;border:3px solid #7bcfa4;border-radius:inherit;pointer-events:none;animation:answer-ring .45s both}
+.answer-celebrate .feedback.good b{color:#126e50;text-shadow:0 1px 0 #cdecb6}
+.combo-burst{position:absolute;right:9%;bottom:10%;z-index:10;display:flex;align-items:center;gap:7px;color:#fff1ac;text-shadow:0 3px 0 #17334a,0 0 12px #17334a;transform:rotate(-9deg);animation:combo-burst .7s var(--impact) both}
+.combo-burst b{font:900 italic 68px/.9 Impact,'Arial Black',sans-serif;-webkit-text-stroke:1px #233c48;paint-order:stroke fill}
+.combo-burst span{font-size:12px;font-weight:900;writing-mode:vertical-rl;letter-spacing:.08em}
+.ultimate-beam{position:absolute;z-index:3;left:-20%;top:54%;width:140%;height:45px;transform:rotate(var(--slash-angle));background:linear-gradient(transparent,var(--blast-edge) 20%,#fff 44%,#fff 56%,var(--blast) 80%,transparent);box-shadow:0 0 30px var(--blast-edge);animation:ultimate-beam .55s var(--impact) both}
+.meteor-trails{display:none;position:absolute;inset:0;z-index:4}
+.meteor-trails i{position:absolute;top:calc(30% + var(--i)*13%);left:calc(10% + var(--i)*25%);width:10px;height:180px;border-radius:100%;background:linear-gradient(transparent,#ffb55e,#fff);transform:rotate(38deg);animation:meteor-strike .48s calc(var(--impact) + var(--i)*45ms) both;box-shadow:0 8px 17px #ffb332}
+[data-technique=meteor] .meteor-trails{display:block}
+[data-technique=meteor] .ultimate-beam{display:none}
+[data-technique=nova] .ultimate-beam{transform:rotate(90deg);height:65px}
+[data-technique=nova] .impact-star{border-radius:50%;clip-path:none;background:radial-gradient(circle,#fff 5%,#efddff 20%,#ae7cff8c 45%,transparent 70%)}
+.impact-shards{position:absolute;inset:0;z-index:5}
+.impact-shards i{position:absolute;left:50%;top:56%;width:15px;height:27px;background:var(--blast);clip-path:polygon(50% 0,100% 60%,30% 100%,0 35%);animation:shard-launch .66s var(--impact) both}
+[data-tier=special] .power-gather,[data-tier=finish] .power-gather{z-index:4;background:radial-gradient(circle,#fff 0%,var(--blast) 12%,transparent 60%)}
+[data-tier=special] .impact-star,[data-tier=finish] .impact-star{width:90%;left:5%;animation-duration:.55s}
+[data-tier=special] .attack-title,[data-tier=finish] .attack-title{font-size:clamp(20px,2.8vw,31px);padding-block:7px}
+[data-tier=finish] .blast-wave{border-width:15px;animation-duration:.9s}
+.finisher-sun{position:absolute;inset:-30%;z-index:0;background:repeating-conic-gradient(#ffe8a075 0deg 9deg,transparent 9deg 23deg);mask-image:radial-gradient(circle,#000 10%,transparent 66%);animation:finisher-sun 1.35s calc(var(--impact) + 170ms) both}
+.defeat-motion .battle-monster{animation-name:dragon-finish}
+.defeat-motion .victory-seal{color:#fff5c1;text-shadow:0 4px 0 #4e361b,0 0 22px #ffd477;animation-name:victory-slam}
+.defeat-motion .victory-seal:after{content:"✦　✦　✦";display:block;font-size:21px;letter-spacing:.5em;margin-top:7px;color:#ffd775}
+.defeat-motion .victory-seal b{font-size:clamp(40px,6vw,65px)}
+.reward-confetti{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.reward-confetti i{position:absolute;left:var(--x);top:-20px;width:8px;height:16px;background:var(--confetti);border-radius:2px;animation:confetti-drop 1.6s var(--delay) both}
+.reveal-motion .reward-art:after{content:"";position:absolute;inset:4%;border:3px solid #fff5b5;border-radius:50%;pointer-events:none;animation:reward-shockwave .8s .12s both}
+.reveal-motion .reward-ribbon{animation:ribbon-slam .5s .2s both}
+.reveal-motion .new-catch{animation:collection-register .48s .32s both,registration-glow 1s .7s both}
+@keyframes battle-darken{0%{opacity:0}20%,42%{opacity:1}100%{opacity:0}}
+@keyframes battle-darken-soft{0%{opacity:0}20%,42%{opacity:.5}100%{opacity:0}}
+@keyframes answer-shout{0%{opacity:0;transform:scale(1.7) rotate(-8deg)}30%,65%{opacity:1;transform:scale(1) rotate(-5deg)}100%{opacity:0;transform:scale(.9) rotate(-5deg)}}
+@keyframes speed-burst{0%{opacity:0;transform:scale(.85)}15%{opacity:.5}100%{opacity:0;transform:scale(1.2)}}
+@keyframes star-impact{0%{opacity:0;transform:translateY(-50%) scale(.05) rotate(-20deg)}12%,28%{opacity:.95;transform:translateY(-50%) scale(1) rotate(0)}100%{opacity:0;transform:translateY(-50%) scale(1.35) rotate(12deg)}}
+@keyframes blast-expand{0%{opacity:0;transform:scale(.1)}12%{opacity:.9}100%{opacity:0;transform:scale(4)}}
+@keyframes battle-zoom{0%,100%{transform:none}15%,28%{transform:scale(1.08)}60%{transform:scale(1.02)}}
+@keyframes power-recoil{0%{transform:none}12%,28%{transform:translate(13px,-5px) scale(1.08) rotate(6deg);filter:brightness(1.85)}55%{transform:translate(-5px,1px) scale(.97) rotate(-2deg);filter:brightness(1.1)}100%{transform:none;filter:brightness(1)}}
+@keyframes answer-power{0%{transform:scale(.88)}40%{transform:scale(1.1);box-shadow:0 4px 0 #62a06a,0 0 24px #7dd68499}100%{transform:none}}
+@keyframes answer-ring{0%{opacity:1;transform:scale(.9)}100%{opacity:0;transform:scale(1.28)}}
+@keyframes combo-burst{0%{opacity:0;scale:2}20%{opacity:1;scale:.9}34%,78%{opacity:1;scale:1}100%{opacity:0;scale:1.08;translate:0 -8px}}
+@keyframes ultimate-beam{0%{opacity:0;scale:.05 1}16%,28%{opacity:1;scale:1 1}100%{opacity:0;scale:1.15 .1}}
+@keyframes meteor-strike{0%{opacity:0;translate:60px -130px}25%{opacity:1}60%{opacity:1;translate:-25px 60px}100%{opacity:0;translate:-45px 110px}}
+@keyframes shard-launch{0%{opacity:0;transform:rotate(var(--angle)) translateY(15px)}14%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(180px) rotate(140deg) scale(.2)}}
+@keyframes finisher-sun{0%{opacity:0;transform:rotate(-20deg) scale(.2)}30%{opacity:.7}100%{opacity:0;transform:rotate(20deg) scale(1.2)}}
+@keyframes victory-slam{0%{opacity:0;scale:2.3;rotate:-8deg}48%{opacity:1;scale:.92;rotate:2deg}70%{scale:1.04;rotate:-1deg}100%{opacity:1;scale:1;rotate:0deg}}
+@keyframes confetti-drop{0%{opacity:0;transform:translate(0,0) rotate(0)}10%,70%{opacity:1}100%{opacity:0;transform:translate(var(--drift),440px) rotate(calc(var(--i)*67deg))}}
+@keyframes reward-shockwave{0%{opacity:0;transform:scale(.2)}30%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+@keyframes ribbon-slam{0%{opacity:0;scale:1.5}60%{opacity:1;scale:.96}100%{opacity:1;scale:1}}
+@keyframes registration-glow{0%,100%{box-shadow:none}35%{box-shadow:0 0 0 4px #fff1b8,0 0 28px #eaba4799}}
+@media(max-width:760px){
+  .attack-title{top:33%}.combo-burst{right:8%;bottom:35px}.combo-burst b{font-size:52px}.combo-burst span{font-size:10px}
+  [data-tier=special] .attack-title,[data-tier=finish] .attack-title{font-size:19px}
+  .defeat-motion .victory-seal b{font-size:48px}
+}
+@media(max-width:760px) and (max-height:660px){
+  .attack-title{top:38%;padding-block:2px}.combo-burst{right:6%;bottom:31px}.combo-burst b{font-size:36px}
+  [data-tier=special] .attack-title,[data-tier=finish] .attack-title{font-size:15px;padding-block:3px}
+  .defeat-motion .victory-seal b{font-size:34px}.defeat-motion .victory-seal:after{font-size:12px;margin-top:0}
+}

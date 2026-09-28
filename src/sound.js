@@ -21,24 +21,25 @@ export function playNote(context, destination, note, at, voices = new Set()) {
   const envelope = context.createGain(), filter = context.createBiquadFilter();
   const pan = context.createStereoPanner();
   const { voice, duration, gain } = note;
-  const attack = voice === 'strings' ? .13 : voice === 'brass' ? .035 : .006;
+  const attack = voice === 'strings' ? .13 : voice === 'brass' ? .035 : ['slash', 'crack', 'kick', 'snare', 'hat'].includes(voice) ? .002 : .006;
   const end = at + duration;
   envelope.gain.setValueAtTime(0, at);
   envelope.gain.linearRampToValueAtTime(gain, at + Math.min(attack, duration / 3));
   if (['strings', 'brass', 'flute'].includes(voice)) envelope.gain.linearRampToValueAtTime(gain * .65, at + duration * .7);
   envelope.gain.exponentialRampToValueAtTime(.0001, end);
   envelope.gain.linearRampToValueAtTime(0, end + .015);
-  filter.type = voice === 'noise' ? 'bandpass' : 'lowpass';
-  filter.Q.value = voice === 'noise' ? .7 : .4;
-  filter.frequency.setValueAtTime(note.frequency || ({ strings: 2200, brass: 1800, bass: 650, wood: 1600, flute: 2800 }[voice] || 6500), at);
+  filter.type = ['noise', 'slash', 'crack', 'snare', 'hat'].includes(voice) ? 'bandpass' : 'lowpass';
+  filter.Q.value = voice === 'slash' ? 1.2 : voice === 'crack' ? .65 : voice === 'hat' ? .8 : .4;
+  filter.frequency.setValueAtTime(note.frequency || ({ strings: 2200, brass: 1800, bass: 650, wood: 1600, flute: 2800, lead: 3600, kick: 420, snare: 2100, hat: 7200, slash: 6500, crack: 4200 }[voice] || 6500), at);
   if (note.endFrequency) filter.frequency.exponentialRampToValueAtTime(note.endFrequency, end);
   pan.pan.value = note.pan || 0;
   filter.connect(envelope); envelope.connect(pan); pan.connect(destination);
   const sources = [];
-  const source = voice === 'noise' ? context.createBufferSource() : context.createOscillator();
-  if (voice === 'noise') { source.buffer = noiseBuffer(context); source.loop = true; }
+  const noisy = ['noise', 'slash', 'crack', 'snare', 'hat'].includes(voice);
+  const source = noisy ? context.createBufferSource() : context.createOscillator();
+  if (noisy) { source.buffer = noiseBuffer(context); source.loop = true; }
   else {
-    source.type = ['pluck', 'strings', 'brass', 'wood'].includes(voice) ? 'triangle' : 'sine';
+    source.type = voice === 'lead' ? 'sawtooth' : ['pluck', 'strings', 'brass', 'wood'].includes(voice) ? 'triangle' : 'sine';
     source.frequency.setValueAtTime(pitch(note.note), at);
     if (note.endNote !== undefined) source.frequency.exponentialRampToValueAtTime(pitch(note.endNote), end);
   }
@@ -195,6 +196,8 @@ export function createAudio({ createContext = () => {
     if (context) { context.onstatechange = null; context.close().catch(() => {}); }
     context = null; allowed = false;
   }
-  return { configure, unlock, sound, dispose };
+  // Also invalidate pending cues when a player skips an animation to keep studying.
+  function cancelCue() { epoch++; stopEffects(); }
+  return { configure, unlock, sound, cancelCue, dispose };
 }
 export const audio = createAudio();

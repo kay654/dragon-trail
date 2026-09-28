@@ -1,5 +1,5 @@
 // Bump this version whenever shipped assets or question data change.
-const VERSION = "v3";
+const VERSION = "v4";
 const SCOPE = new URL(self.registration.scope);
 const CACHE_PREFIX = `kanji-dragon-trail-${encodeURIComponent(SCOPE.pathname)}-`;
 const CACHE = CACHE_PREFIX + VERSION;
@@ -15,6 +15,9 @@ const ASSETS = [
   "./src/question-choices.js",
   "./src/game.js",
   "./src/play-screens.js",
+  "./src/battle-feedback.js",
+  "./src/attack-art.js",
+  "./src/battle-effects.css",
   "./src/screens.js",
   "./src/sound.js",
   "./src/sound-score.js",

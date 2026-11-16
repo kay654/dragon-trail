@@ -5,7 +5,7 @@ import { audio } from './sound.js';
 import { battleFeedback } from './battle-feedback.js';
 import { AREAS, MONSTERS, monsterById, loadGame, saveGame, startBattle, strike, advanceBattle, claimReward, resetGame } from './game.js';
 import { icon, emblem, monster } from './art.js';
-import { track } from './analytics.js';
+import { markUsed, track } from './analytics.js';
 
 const app = document.querySelector('#app');
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -77,8 +77,11 @@ function begin(practice = false) {
   const active = startBattle(game, questions, practice);
   if (!active) { notice = '復習する問題はクリア済みです。'; go('home'); return; }
   persist();
-  if (startingNewBattle) track('level_start', battleParameters(active));
   go(active.won ? 'reward' : 'battle', active.won || !active.answers);
+  if (!active.won) {
+    markUsed(startingNewBattle ? 'start' : 'resume');
+    if (startingNewBattle) track('level_start', battleParameters(active));
+  }
   if (active.won) rewardSound();
   else if (!active.answers) audio.sound(active.round.mode === 'practice' || currentMonster().kind === 'normal' ? 'start' : currentMonster().kind);
   scheduleNext();
